@@ -1,5 +1,8 @@
 use std::{ffi::CString, os::raw::c_char};
 
+use process_memory::{ProcessHandle, DataMember, TryIntoProcessHandle, copy_address, CopyAddress};
+use sysinfo::SystemExt;
+
 // STRING INTEROP ----------
 // Thanks to https://dev.to/living_syn/calling-rust-from-c-6hk for string interop source!
 static mut STRING_POINTER: *mut c_char = 0 as *mut c_char;
@@ -37,4 +40,15 @@ pub extern "C" fn test_method() -> InteropableString {
     InteropableString {
         value: store_string_on_heap(return_value),
     }
+}
+
+#[no_mangle]
+pub extern "C" fn save_state() -> bool {
+    let handle = get_terraria_handle();
+
+    true
+}
+
+fn get_terraria_handle() -> ProcessHandle {
+    std::process::id().try_into_process_handle().unwrap()
 }

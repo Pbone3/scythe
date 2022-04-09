@@ -9,3 +9,4 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
+process-memory = "0.4.0"
